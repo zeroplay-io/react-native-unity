@@ -31,7 +31,8 @@ public class ReactNativeUnity {
         return _isUnityPaused;
     }
 
-    public static void createPlayer(final Activity activity, final UnityPlayerCallback callback) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public static void createPlayer(final Activity activity, final UnityPlayerCallback callback)
+            throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         if (unityPlayer != null) {
             callback.onReady();
 
@@ -44,30 +45,33 @@ public class ReactNativeUnity {
                 public void run() {
                     activity.getWindow().setFormat(PixelFormat.RGBA_8888);
                     int flag = activity.getWindow().getAttributes().flags;
-                    boolean fullScreen = false;
-                    if ((flag & WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN) {
-                        fullScreen = true;
-                    }
+                    boolean fullScreen = _fullScreen || (flag
+                            & WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN;
 
                     try {
                         unityPlayer = new UPlayer(activity, callback);
-                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {}
+                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                            | InvocationTargetException e) {
+                    }
 
                     try {
                         // wait a moment. fix unity cannot start when startup.
                         Thread.sleep(1000);
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                    }
 
                     // start unity
                     try {
                         addUnityViewToBackground();
-                    } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {}
+                    } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+                    }
 
                     unityPlayer.windowFocusChanged(true);
 
                     try {
                         unityPlayer.requestFocusPlayer();
-                    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {}
+                    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    }
 
                     unityPlayer.resume();
 
@@ -80,7 +84,8 @@ public class ReactNativeUnity {
 
                     try {
                         callback.onReady();
-                    } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {}
+                    } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+                    }
                 }
             });
         }
@@ -107,7 +112,8 @@ public class ReactNativeUnity {
         }
     }
 
-    public static void addUnityViewToBackground() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public static void addUnityViewToBackground()
+            throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         if (unityPlayer == null) {
             return;
         }
@@ -132,7 +138,8 @@ public class ReactNativeUnity {
         activity.addContentView(unityPlayer.requestFrame(), layoutParams);
     }
 
-    public static void addUnityViewToGroup(ViewGroup group) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static void addUnityViewToGroup(ViewGroup group)
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (unityPlayer == null) {
             return;
         }
